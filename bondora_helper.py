@@ -4,7 +4,7 @@ import openpyxl
 
 def write_lines(input_file, header):
     booking_lines = header
-    if input_file.endsWith == '.xlsx':
+    if input_file.lower().endswith('.xlsx'):
         try:
             workbook = openpyxl.load_workbook(input_file)
             sheet = workbook.active
