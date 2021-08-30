@@ -14,11 +14,11 @@ bekommt nur die Erweiterung *_convert.csv*
 Exceldatei die über ***Kontoübersicht herunterladen*** lokal gespeichert werden kann. Aktuell erfolgt eine 
 Unterscheidung nach Zinszahlung und Einzahlung.
 ![img.png](pictures/img.png)
-Auszahlungen sind **nicht** umgesetzt und werden somit auch nicht mir die in konvertierte Datei übertragen.
+Auszahlungen sind **nicht** umgesetzt und werden somit auch nicht mit in die konvertierte Datei übertragen.
 
 ### Bondora Portfolio Manager
 Exceldatei die über die Berichtfunktion ***Kontoauszug*** heruntergeladen werden kann.
 Umbuchungen auf das Go&Grow werden erkannt. Die Zinsen aus Go&Grow können über den PDF-Import - direkt in PP - 
 importiert werden.
 
-Auszahlungen sind **nicht** umgesetzt und werden somit auch nicht mir die in konvertierte Datei übertragen.
+Auszahlungen sind **nicht** umgesetzt und werden somit auch nicht mit in die konvertierte Datei übertragen.
