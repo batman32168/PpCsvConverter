@@ -1,5 +1,4 @@
 import openpyxl
-from datetime import datetime
 
 
 def write_lines(input_file, header):
@@ -11,16 +10,20 @@ def write_lines(input_file, header):
             max_rows = sheet.max_row
             for r in range(2, max_rows + 1):
                 try:
-                    valuate_date = datetime.strptime(sheet.cell(row=r, column=2).value, '%m/%d/%Y').strftime('%Y-%m-%dT%H:%M')
-                    note = sheet.cell(row=r, column=3).value
-                    amount = str(sheet.cell(row=r, column=7).value).replace('.', ',')
-                    if sheet.cell(row=r, column=5).value is not None:
-                        note = note + sheet.cell(row=r, column=5).value
+                    valuate_date = sheet.cell(row=r, column=1).value.strftime('%Y-%m-%dT%H:%M')
+                    if sheet.cell(row=r, column=6).value is not None:
+                        note = 'Darlehen ' + sheet.cell(row=r, column=6).value
+                    else:
+                        note = 'Einzahlung'
+                    amount = str(sheet.cell(row=r, column=3).value).replace('.', ',')
+                    description = str(sheet.cell(row=r, column=5).value).replace('.', ',')
                     booking_type = ''
-                    if note.upper().startswith('BETRAG DER EINGEZ'):
+                    if description.lower().startswith('transferdeposit|'):
                         booking_type = 'Einlage'
-                    elif note.upper().startswith('ZAHLUNG FÜR DEN ZINS'):
+                    elif description.lower().startswith('transferinterestrepaiment'):
                         booking_type = 'Zinsen'
+                    elif description.lower().startswith('transfergogrow'):
+                        booking_type = 'Umbuchung'
                     if booking_type != '':
                         booking_lines.append(valuate_date + ';' + booking_type + ';' + amount + ';EUR;' + note + '\r\n')
                 except Exception as inner_error:
