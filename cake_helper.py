@@ -20,7 +20,7 @@ def write_lines(input_file, auto_invest):
                         coin = values[3].replace('\"', '')
                         amount = values[2].replace('\"', '').replace('.', ',')
                         reference = values[8].replace('\"', '')
-                        if auto_invest.lower == 'auto_invest':
+                        if auto_invest == 'auto_invest':
                             booking_lines.append(valuate_date + ';Kauf;' + fiat_value + ';' + fiat_currency + ';' +
                                                  amount + ';' + coin + ';Reference ' + reference + '\r\n')
                         booking_lines.append(valuate_date + ';Zinsen;' + fiat_value + ';' + fiat_currency +
