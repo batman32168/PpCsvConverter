@@ -28,3 +28,7 @@ CSV Datei die über die Berichtfunktion ***Export*** heruntergeladen werden kann
 Es werden nur Staking rewards erkannt. Diese werden als Dividende angelegt.
 Mit der Option ```-o auto_invest``` erfolgt eine automatische wiederanlage der Gutschriften.
 Für den Import muss ein Wertpapier mit dem WKZ für die entsprechenden Kryptowährung (z.B. DFI ) angelegt sein
+
+### Robo.cah ```-t robo_cash```
+XLS Import für die robo.cash Exceldatei. Es wird hier nur der **einfache** Kontoauszug unterstützt.
+Auszahlungen sind **nicht** umgesetzt und werden somit auch nicht mit in die konvertierte Datei übertragen.
