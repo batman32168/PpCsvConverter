@@ -3,6 +3,7 @@ import argparse
 
 import bondora_helper
 import cake_helper
+import robo_helper
 import via_helper as via
 import main_helper as helper
 import os.path
@@ -33,6 +34,8 @@ if __name__ == '__main__':
             bookings = bondora_helper.write_lines(input_file, bookings)
         elif int_arg.file_format.lower() == 'cake_defi':
             bookings = cake_helper.write_lines(input_file, int_arg.additional_option)
+        elif int_arg.file_format.lower() == 'robo_cash':
+            bookings = robo_helper.write_lines(input_file, bookings)
         else:
             print('Das angegebene Format wird nicht unterstützt.')
 
