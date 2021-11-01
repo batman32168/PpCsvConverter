@@ -17,9 +17,9 @@ def write_lines(input_file, header):
                     if sheet.cell(row=r, column=5).value is not None:
                         note = note + sheet.cell(row=r, column=5).value
                     booking_type = ''
-                    if note.upper().startswith('BETRAG DER EINGEZ'):
+                    if note.upper().startswith('BETRAG DER EINGEZ') or note.upper().startswith('Amount of funds'.upper()):
                         booking_type = 'Einlage'
-                    elif note.upper().startswith('ZAHLUNG FÜR DEN ZINS'):
+                    elif note.upper().startswith('ZAHLUNG FÜR DEN ZINS') or note.upper().startswith('Amount of interest payment'.upper()):
                         booking_type = 'Zinsen'
                     if booking_type != '':
                         booking_lines.append(valuate_date + ';' + booking_type + ';' + amount + ';EUR;' + note + '\r\n')
