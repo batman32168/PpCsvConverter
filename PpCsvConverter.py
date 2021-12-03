@@ -14,7 +14,7 @@ if __name__ == '__main__':
     parser.add_argument('-i', '--inputfile', dest="input_file", required=True,
                         help='Name (inkl. Pfad) zur Eingangsdatei.')
     parser.add_argument('-f', '--format', dest="file_format", required=True,
-                        help='Format bzw. Datentyp der Datei. Mögliche Werte: \r\n * viainvest *bondora *cake')
+                        help='Format bzw. Datentyp der Datei. Mögliche Werte: \r\n * viainvest *bondora *cake_defi * robo_cash')
 
     parser.add_argument('-o', '--option', dest="additional_option", required=False, default='',
                         help='zusätzliche Option.  z.B für cake: auto_invest -> Dadurch werden alle rewards automatisch'
