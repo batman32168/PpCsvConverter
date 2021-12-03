@@ -22,8 +22,12 @@ def write_lines(input_file, header):
                         booking_type = 'Einlage'
                     elif description.lower().startswith('transferinterestrepaiment'):
                         booking_type = 'Zinsen'
+                    elif description.lower().startswith('TransferGoGrowMainRepaiment'):
+                        booking_type = 'Einlage'
                     elif description.lower().startswith('transfergogrow'):
-                        booking_type = 'Umbuchung'
+                        booking_type = 'Entnahme'
+                    elif description.lower().startswith('GoGrowWithdrawalFee'):
+                        booking_type = 'Gebühren'
                     if booking_type != '':
                         booking_lines.append(valuate_date + ';' + booking_type + ';' + amount + ';EUR;' + note + '\r\n')
                 except Exception as inner_error:
