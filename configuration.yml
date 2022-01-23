@@ -1,0 +1,35 @@
+---
+- name: 'Viainvest'
+  filepattern: 'transactions202*.xlsx'
+  start_row: 2
+  columns:
+    - column:
+        name: 'amount'
+        column_number: 7
+    - column:
+        name: 'valuta_date'
+        column_number: 2
+        format: '%m/%d/%Y'
+    - column:
+        name: 'note'
+        column_number: 3,5
+    - column:
+        name: 'booking_type'
+        column_number: 3
+        value: 'Einlage'
+        search_values: 'Betrag der eingezahlt'
+- name: 'robo.cash'
+  filepattern: '3708_*.xls'
+  start_row: 2
+  columns:
+    - amount:
+        column_number: 7
+    - valuta_date:
+        column_number: 2
+        format: '%m/%d/%Y'
+    - note:
+        column_number: 3,5
+    - booking_type:
+        column_number: 3
+        value: 'Einlage'
+        search_values: 'Betrag der eingezahlt'
