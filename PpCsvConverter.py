@@ -5,6 +5,7 @@ import glob
 
 import bondora_helper
 import cake_helper
+import exporter
 import extractor
 import robo_helper
 import via_helper as via
@@ -45,11 +46,16 @@ if __name__ == '__main__':
     for file_parser in extrators.values():
         print("Starte mit Konfiguration " + file_parser.name)
         print("Lade Dateiliste mit dem Muster " +file_parser.filepattern)
+        export = exporter.exporter()
+        export.write_header(file_parser.columns.keys())
         file_list = glob.glob(input_folder+"/"+file_parser.filepattern)
         for work_file in file_list:
             print("Verarbeite Datei '{}'".format(work_file))
-            file_parser.extract_lines(work_file)
-        print('Konfiguration '+data_type['name'] +' abgeschlossen.')
+            export.set_raw_data(file_parser.extract_lines(work_file))
+            print('Extraktion abgeschlossen. Daten werden exportiert')
+            foldername,filename = os.path.split(work_file)
+            export.write_csv_file( filename, foldername)
+        print('Konfiguration '+file_parser.name +' abgeschlossen.')
     print('Geschaft')
     print('Viel Spaß beim Import in dein PP.')
     exit(1)

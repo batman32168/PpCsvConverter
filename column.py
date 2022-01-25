@@ -44,11 +44,9 @@ class column:
     @property
     def mappings(self):
         temp_maps = {}
-        if 'mapping' in self._definition and self._configuration['mapping'] is not None:
-            for map_config in self._configuration['mapping']:
-                mapping_type = map_config['type']
-                for s_value in mapping.mapping(map_config).serach_values:
-                    temp_maps[s_value] = mapping_type
+        if 'mapping' in self._definition and self._definition['mapping'] is not None:
+            for map_config in self._definition['mapping']:
+                temp_maps[map_config['search_value']] = map_config['type']
         return temp_maps
 
     def get_formated_value(self, original_value: str):
@@ -58,4 +56,12 @@ class column:
                 ret_value = datetime.strptime(original_value, self.format).strftime('%Y-%m-%dT%H:%M')
             else:
                 ret_value = str(original_value).format(self.format)
+        elif self.header == column_types.booking_type:
+            if self.mappings is not None and len(self.mappings)!= 0:
+                for search_value in self.mappings.keys():
+                    if search_value in original_value:
+                        ret_value = self.mappings[search_value]
+                        break
+            if ret_value == original_value:
+                raise ValueError('No mapping foung')
         return ret_value

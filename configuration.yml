@@ -5,7 +5,7 @@
   columns:
     - name: 'amount'
       column_number: 7
-      format: '.8f'
+      format: '.2f'
     - name: 'valuta_date'
       column_number: 2
       format: '%m/%d/%Y'
@@ -13,20 +13,27 @@
       column_number: 5
     - name: 'booking_type'
       column_number: 3
+      mapping:
+        - type: 'Einlage'
+          search_value: 'Geld einzahlen'
+        - type: 'Zinsen'
+          search_value: 'Amount of interest payment'
 - name: 'robo.cash'
   filepattern: '3708_*.xls'
   start_row: 2
   columns:
     - name: 'amount'
-      column_number: 2
-      format: '.8f'
+      column_number: 3
+      format: '.10f'
     - name: 'valuta_date'
-      column_number: 0
+      column_number: 1
       format: '%Y-%m-%d %H:%M:%S'
     - name: 'note'
-      column_number: 1
+      column_number: 2
     - name: 'booking_type'
-      column_number: 1
+      column_number: 2
       mapping:
         - type: 'Einlage'
-          search_values: 'Betrag der eingezahlt'
+          search_value: 'Geld einzahlen'
+        - type: 'Zinsen'
+          search_value: 'Zinszahlung von'
