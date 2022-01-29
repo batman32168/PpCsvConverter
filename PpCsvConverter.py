@@ -54,7 +54,7 @@ if __name__ == '__main__':
             export.set_raw_data(file_parser.extract_lines(work_file))
             print('Extraktion abgeschlossen. Daten werden exportiert')
             foldername,filename = os.path.split(work_file)
-            export.write_csv_file( filename, foldername)
+            export.write_csv_file( filename, foldername,file_parser.name)
         print('Konfiguration '+file_parser.name +' abgeschlossen.')
     print('Geschaft')
     print('Viel Spaß beim Import in dein PP.')

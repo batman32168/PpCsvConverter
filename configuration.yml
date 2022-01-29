@@ -2,6 +2,7 @@
 - name: 'Viainvest'
   filepattern: 'transactions202*.xlsx'
   start_row: 2
+  summary: 'weekly'
   columns:
     - name: 'amount'
       column_number: 7
@@ -15,12 +16,13 @@
       column_number: 3
       mapping:
         - type: 'Einlage'
-          search_value: 'Geld einzahlen'
+          search_value: 'Amount of funds deposited'
         - type: 'Zinsen'
           search_value: 'Amount of interest payment'
 - name: 'robo.cash'
   filepattern: '3708_*.xls'
   start_row: 2
+  summary: 'weekly'
   columns:
     - name: 'amount'
       column_number: 3
@@ -37,3 +39,29 @@
           search_value: 'Geld einzahlen'
         - type: 'Zinsen'
           search_value: 'Zinszahlung von'
+- name: 'bondora'
+  filepattern: 'Auszug_202*.xlsx'
+  start_row: 2
+  summary: 'weekly'
+  columns:
+    - name: 'amount'
+      column_number: 3
+      format: '.10f'
+    - name: 'valuta_date'
+      column_number: 1
+      format: '%d.%m.%Y %H:%M'
+    - name: 'note'
+      column_number: 6
+    - name: 'booking_type'
+      column_number: 5
+      mapping:
+        - type: 'Einlage'
+          search_value: 'TransferDeposit'
+        - type: 'Zinsen'
+          search_value: 'transferinterestrepaiment'
+        - type: 'Einlage'
+          search_value: 'TransferGoGrowMainRepaiment'
+        - type: 'Entnahme'
+          search_value: 'transfergogrow'
+        - type: 'Gebühren'
+          search_value: 'GoGrowWithdrawalFee'

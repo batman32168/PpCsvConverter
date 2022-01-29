@@ -53,13 +53,16 @@ class column:
         ret_value: str = original_value
         if (self.format != ''):
             if (self.header == column_types.valuta_date):
-                ret_value = datetime.strptime(original_value, self.format).strftime('%Y-%m-%dT%H:%M')
+                try:
+                    ret_value= original_value.strftime('%Y-%m-%d %H:%M')
+                except ValueError:
+                    ret_value = datetime.strptime(original_value, self.format).strftime('%Y-%m-%d %H:%M')
             else:
                 ret_value = str(original_value).format(self.format)
         elif self.header == column_types.booking_type:
             if self.mappings is not None and len(self.mappings)!= 0:
                 for search_value in self.mappings.keys():
-                    if search_value in original_value:
+                    if search_value.lower() in original_value.lower():
                         ret_value = self.mappings[search_value]
                         break
             if ret_value == original_value:
