@@ -2,32 +2,39 @@
 Konvertiert Excel und CSV Dateien in das für den CSV Import von Portfolio 
 Performance notwendige format.
 
-## Verwendung
+## Usages
 
 ``` python
-python3 PpCsvConverter.py -i[nputfile] <DateiMitPfad> -f[ormat] <EingabeFormat>
+python3 PpCsvConverter.py -i[nputfolder] <pathToFolderWithFiles
 ```
-Die fertig konvertierte Datei wird in dasselbe Verzeichnis gespeichert wie die Originaldatei. Sie 
-bekommt nur die Erweiterung *_convert.csv*
-## Unterstützte Importformate
-### VIAInvest ```-t viainvest```
-Exceldatei die über ***Kontoübersicht herunterladen*** lokal gespeichert werden kann. Aktuell erfolgt eine 
-Unterscheidung nach Zinszahlung und Einzahlung.
-![img.png](pictures/img.png)
-Auszahlungen sind **nicht** umgesetzt und werden somit auch nicht mit in die konvertierte Datei übertragen.
 
-### Bondora Portfolio Manager ```-t bondora```
-Exceldatei die über die Berichtfunktion ***Kontoauszug*** heruntergeladen werden kann.
-Umbuchungen auf das Go&Grow werden erkannt. Die Zinsen aus Go&Grow können über den PDF-Import - direkt in PP - 
-importiert werden.
+## Output  
+The result files - in csv format - will be stored in a new folder named 'output' inside the input folder.
 
+## Configuration
+For configuration there is a **configuration.yml** file used.
 
-### Cake ```-t cake_defi``` 
-CSV Datei die über die Berichtfunktion ***Export*** heruntergeladen werden kann.
-Es werden nur Staking rewards erkannt. Diese werden als Dividende angelegt.
-Mit der Option ```-o auto_invest``` erfolgt eine automatische Wiederanlage der Gutschriften.
-Für den Import muss ein Wertpapier mit dem WKZ für die entsprechenden Kryptowährung (z.B. DFI ) angelegt sein
+```yaml
+---
+- name: 'Viainvest'                               # the name of the current config
+  filepattern: 'transactions202*.xlsx'            # the pattern is used to identify the necessary files
+  start_row: 2                                    # start reading in this row. Count starts at 1
+  summary: 'weekly'                               # *optional: calculate at sum.
+  columns:                                        # list of columns which will be read
+    - name: 'amount'                              # name/header in the export file
+      column_number: 7                            # column number in the original file. Count start at 1
+      format: '.2f'                               # format of the value
+    - name: 'valuta_date'
+      column_number: 2
+      format: '%m/%d/%Y'
+    - name: 'note'
+      column_number: 5
+    - name: 'booking_type'
+      column_number: 3
+      mapping:                                          # mapping list only available in column booking_type.
+        - type: 'Einlage'
+          search_value: 'Amount of funds deposited'
+        - type: 'Zinsen'
+          search_value: 'Amount of interest payment'
+```
 
-### Robo.cah ```-t robo_cash```
-XLS Import für die robo.cash Exceldatei. Es wird hier nur der **einfache** Kontoauszug unterstützt.
-Auszahlungen sind **nicht** umgesetzt und werden somit auch nicht mit in die konvertierte Datei übertragen.
