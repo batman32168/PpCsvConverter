@@ -1,45 +1,55 @@
 # coding=utf-8
 import argparse
-
-import bondora_helper
-import cake_helper
-import robo_helper
-import via_helper as via
-import main_helper as helper
+import yaml
+import glob
+import exporter
+import extractor
 import os.path
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-i', '--inputfile', dest="input_file", required=True,
-                        help='Name (inkl. Pfad) zur Eingangsdatei.')
-    parser.add_argument('-f', '--format', dest="file_format", required=True,
-                        help='Format bzw. Datentyp der Datei. Mögliche Werte: \r\n * viainvest *bondora *cake_defi * robo_cash')
-
-    parser.add_argument('-o', '--option', dest="additional_option", required=False, default='',
-                        help='zusätzliche Option.  z.B für cake: auto_invest -> Dadurch werden alle rewards automatisch'
-                             ' zusätzlich als Kauf eingetragen.')
+    parser.add_argument('-i', '--inputfolder', dest="input_folder", required=True,
+                        help='Pfad der die Eingabedateien enthält.')
+    parser.add_argument('-o', '--outputfolder', dest="output_folder", required=False,
+                        help='Pfad für die CSV-Exporte')
 
     # Startparameter einlesen
     int_arg = parser.parse_args()
-    input_file = int_arg.input_file
-    if os.path.isfile(input_file):
-        # Header in für die PP CSV Datei
-        bookings = ['Datum;Typ;Wert;Buchungswährung;Notiz\r\n']
+    input_folder = int_arg.input_folder
+    print('Eingangsverzeichnis: '+ input_folder)
 
-        # Fall unterscheidung treffen.
-        if int_arg.file_format.lower() == 'viainvest' or int_arg.file_format.lower() == 'via':
-            bookings = via.write_lines(input_file, bookings)
-        elif int_arg.file_format.lower() == 'bondora':
-            bookings = bondora_helper.write_lines(input_file, bookings)
-        elif int_arg.file_format.lower() == 'cake_defi':
-            bookings = cake_helper.write_lines(input_file, int_arg.additional_option)
-        elif int_arg.file_format.lower() == 'robo_cash':
-            bookings = robo_helper.write_lines(input_file, bookings)
-        else:
-            print('Das angegebene Format wird nicht unterstützt.')
 
-        # Ausgabe der Datei
-        helper.write_pp_csv_file(input_file, bookings)
-    else:
-        print("Die Datei '"+input_file+"' wurde nicht gefunden.")
+    with open("./configuration.yml", "r") as stream:
+        try:
+            print('Konfiguration wird ...')
+            print('... gelesen...')
+            configuration = yaml.safe_load(stream)
+            print('... verarbeite ...')
+            extrators ={}
+            for data_type in configuration:
+                temp_ext = extractor.extractor(data_type)
+                extrators[temp_ext.name] =temp_ext
+                print('... ' + temp_ext.name + ' hinzugefügt ...')
+            print('... geschlossen.')
+        except yaml.YAMLError as exc:
+            print('Konfiguration konnte nicht gelesen werden.' + exec)
+            exit(-1)
+
+    for file_parser in extrators.values():
+        print("Starte mit Konfiguration " + file_parser.name)
+        print("Lade Dateiliste mit dem Muster " +file_parser.filepattern)
+        export = exporter.exporter()
+        export.write_header(file_parser.columns.keys())
+        file_list = glob.glob(input_folder+"/"+file_parser.filepattern)
+        for work_file in file_list:
+            print("Verarbeite Datei '{}'".format(work_file))
+            export.set_raw_data(file_parser.extract_lines(work_file))
+            print('Extraktion abgeschlossen. Daten werden exportiert')
+            foldername,filename = os.path.split(work_file)
+            export.write_csv_file( filename, foldername,file_parser.name)
+        print('Konfiguration '+file_parser.name +' abgeschlossen.')
+    print('Geschaft')
+    print('Viel Spaß beim Import in dein PP.')
+    exit(1)
+
