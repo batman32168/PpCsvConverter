@@ -2,7 +2,6 @@ import mapping
 from datetime import datetime
 from column_types import column_types
 
-
 class column:
     def __init__(self, definition: str):
         self._definition = definition
@@ -25,6 +24,8 @@ class column:
                 return column_types.currency
             if (temp == 'wkn'):
                 return column_types.wkn
+            if (temp == 'total_amount'):
+                return column_types.total_amount
             return column_types.note
 
     @property
@@ -50,21 +51,29 @@ class column:
         return temp_maps
 
     def get_formated_value(self, original_value: str):
-        ret_value: str = original_value
+        try:
+            ret_value: str = original_value.replace('\"','')
+            temp_value: str = original_value.replace('\"', '')
+        except Exception:
+            ret_value: str = original_value
+            temp_value: str = original_value
         if (self.format != ''):
             if (self.header == column_types.valuta_date):
                 try:
-                    ret_value= original_value.strftime('%Y-%m-%d %H:%M')
-                except ValueError:
-                    ret_value = datetime.strptime(original_value, self.format).strftime('%Y-%m-%d %H:%M')
+                    ret_value = temp_value.strftime('%Y-%m-%d %H:%M')
+                except Exception:
+                    try:
+                        ret_value = datetime.fromisoformat(temp_value).strftime('%Y-%m-%d %H:%M')
+                    except Exception:
+                        ret_value = datetime.strptime(temp_value, self.format).strftime('%Y-%m-%d %H:%M')
             else:
-                ret_value = str(original_value).format(self.format)
+                ret_value = str(temp_value).format(self.format)
         elif self.header == column_types.booking_type:
             if self.mappings is not None and len(self.mappings)!= 0:
                 for search_value in self.mappings.keys():
-                    if search_value.lower() in original_value.lower():
+                    if search_value.lower() in temp_value.lower():
                         ret_value = self.mappings[search_value]
                         break
-            if ret_value == original_value:
+            if ret_value == temp_value:
                 raise ValueError('No mapping foung')
         return ret_value

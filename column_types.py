@@ -7,4 +7,5 @@ class column_types(Enum):
     note = 3,
     booking_type = 4,
     currency = 5,
-    wkn = 6
+    wkn = 6,
+    total_amount=7

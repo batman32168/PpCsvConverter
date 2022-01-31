@@ -40,7 +40,7 @@
         - type: 'Zinsen'
           search_value: 'Zinszahlung von'
 - name: 'bondora'
-  filepattern: 'Auszug_202*.xlsx'
+  filepattern: 'AccountStatement_2022*.xlsx'
   start_row: 2
   summary: 'weekly'
   columns:
@@ -65,3 +65,103 @@
           search_value: 'transfergogrow'
         - type: 'Gebühren'
           search_value: 'GoGrowWithdrawalFee'
+- name: 'cake_lending_btc_eur_rewards'
+  filepattern: '202*Cake.csv'
+  start_row: 2
+  summary: 'weekly'
+  delimter: ','
+  columns:
+    - name: 'amount'
+      column_number: 5
+      format: '.24f'
+    - name: 'valuta_date'
+      column_number: 1
+      format: '%Y-%m-%dT%H:%M'
+    - name: 'note'
+      column_number: 9
+    - name: 'wkn'
+      column_number: 4
+    - name: 'booking_type'
+      column_number: 2
+      mapping:
+        - type: 'Zinsen'
+          search_value: 'Liquidity mining reward'
+        - type: 'Zinsen'
+          search_value: 'Freezer liquidity mining bonus'
+- name: 'cake_lending_btc_rewards'
+  filepattern: '202*Cake.csv'
+  start_row: 2
+  summary: 'weekly'
+  delimter: ','
+  columns:
+    - name: 'amount'
+      column_number: 3
+      format: '.10f'
+    - name: 'total_amount'
+      column_number: 5
+      format: '.25f'
+    - name: 'valuta_date'
+      column_number: 1
+      format: '%Y-%m-%dT%H:%M'
+    - name: 'note'
+      column_number: 9
+    - name: 'wkn'
+      column_number: 4
+    - name: 'booking_type'
+      column_number: 2
+      mapping:
+        - type: 'Kauf'
+          search_value: 'Liquidity mining reward'
+        - type: 'Kauf'
+          search_value: 'Freezer liquidity mining bonus'
+- name: 'cake_staking_dfi_eur_rewards'
+  filepattern: '202*Cake.csv'
+  start_row: 2
+  summary: 'weekly'
+  delimter: ','
+  columns:
+    - name: 'amount'
+      column_number: 5
+      format: '.24f'
+    - name: 'valuta_date'
+      column_number: 1
+      format: '%Y-%m-%dT%H:%M'
+    - name: 'note'
+      column_number: 9
+    - name: 'booking_type'
+      column_number: 2
+      mapping:
+        - type: 'Zinsen'
+          search_value: 'Freezer staking bonus'
+        - type: 'Zinsen'
+          search_value: '10 years freezer reward'
+        - type: 'Zinsen'
+          search_value: 'Staking reward'
+- name: 'cake_staking_dfi_rewards'
+  filepattern: '202*Cake.csv'
+  start_row: 2
+  summary: 'weekly'
+  delimter: ','
+  columns:
+    - name: 'amount'
+      column_number: 3
+      format: '.24f'
+    - name: 'total_amount'
+      column_number: 5
+      format: '.25f'
+    - name: 'valuta_date'
+      column_number: 1
+      format: '%Y-%m-%dT%H:%M'
+    - name: 'note'
+      column_number: 9
+    - name: 'wkn'
+      column_number: 4
+    - name: 'booking_type'
+      column_number: 2
+      mapping:
+        - type: 'Kauf'
+          search_value: 'Freezer staking bonus'
+        - type: 'Kauf'
+          search_value: '10 years freezer reward'
+        - type: 'Kauf'
+          search_value: 'Staking reward'

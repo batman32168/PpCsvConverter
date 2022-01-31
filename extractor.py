@@ -14,11 +14,11 @@ class extractor:
         self._configuration = configuration
 
     @property
-    def splitt_char(self):
-        if self._configuration['splitt_char'] is None:
+    def delimter(self):
+        if self._configuration['delimter'] is None:
             return ';'
         else:
-            return self._configuration['splitt_char']
+            return self._configuration['delimter']
 
     @property
     def start_row(self):
@@ -126,6 +126,34 @@ class extractor:
                 print('Allgemeiner Fehler beim Verarbeiten der XLSX Datei: ' + repr(error))
         return transaction
 
+    def _extract_csv_file(self, input_file: str):
+        transaction = []
+        if input_file.lower().endswith('.csv'):
+            try:
+                csv_file = open(input_file, 'r')
+                print('Datei erfolgreich geöffnet')
+                lines = csv_file.readlines()
+                columns = self.columns.values()
+                count = 1
+                for file_line in lines:
+                    print('Verarbeite Zeile ' + str(count))
+                    try:
+                        line = {}
+                        if(count >= self.start_row):
+                            csv_columns = file_line.split(self.delimter)
+                            for column in columns:
+                                cell_value = column.get_formated_value(csv_columns[column.column_number - 1])
+                                line[column.header.name] = cell_value
+                            transaction.append(line)
+                        count += 1
+                    except ValueError:
+                        print('Keine Buchungstyp gefunden --> Zeile wird nicht importiert')
+                    except Exception as inner_error:
+                        print('Fehler bei der Verarbeitung der Zeile ' + str(count) + ': ' + repr(inner_error))
+            except Exception as error:
+                print('Allgemeiner Fehler beim Verarbeiten der XLS Datei: ' + repr(error))
+        return transaction
+
     def _convert_transactions(self, transactions):
         result =[]
         temp_helper = {}
@@ -138,7 +166,10 @@ class extractor:
             elif self.summary == summary_types.monthly:
                 line_date = self._last_day_of_month(datetime.strptime(tran[column_types.valuta_date.name], '%Y-%m-%d %H:%M')).strftime('%Y-%m-%d')
 
-            search_key= str.format("{}-{}",line_date,tran[column_types.booking_type.name])
+
+            search_key = str.format("{}-{}", line_date, tran[column_types.booking_type.name])
+            if column_types.wkn.name in tran and tran[column_types.wkn.name] is not None:
+                search_key= str.format("{}-{}-{}",line_date,tran[column_types.booking_type.name],tran[column_types.wkn.name])
             if search_key in temp_helper:
                 temp_helper[search_key] = self._update_transaction(temp_helper[search_key],tran)
             else:
@@ -148,7 +179,10 @@ class extractor:
             line=''
             for key in summary.keys():
                 if summary[key] is not None:
-                    line = line+str(summary[key])+";"
+                    try:
+                        line = line+'{0:.8f}'.format(summary[key])+";"
+                    except Exception:
+                        line = line+str(summary[key])+";"
                 else:
                     line = line + ";;"
             line +='\r'
